@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Chart
+
+# Model Form Field configuration
+form: $/waka/charter/models/chart/fields.yaml
+
+# Model Class name
+modelClass: Waka\Charter\Models\Chart
+
+# Default redirect location
+defaultRedirect: waka/charter/charts
+
+# Create page
+create:
+    title: Create Chart
+    redirect: waka/charter/charts/update/:id
+    redirectClose: waka/charter/charts
+
+# Update page
+update:
+    title: Edit Chart
+    redirect: waka/charter/charts
+    redirectClose: waka/charter/charts
+
+# Preview page
+preview:
+    title: Preview Chart

@@ -1,0 +1,85 @@
+<html>
+
+<head>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <style>
+        #container {
+            width:{{ data.width|default(600) }}px;
+            height:{{ data.height|default(400) }}px;
+            margin: 0 auto
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+
+
+
+    <script>
+        Highcharts.chart('container', {
+
+            title: {
+                text: '{{ data.title|escape('js') }}'
+            },
+
+            subtitle: {
+                text: '{{ data.subtitle|escape('js') }}'
+            },
+
+            yAxis: {
+                title: {
+                    text: '{{ data.textyaxis|escape('js') }}'
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+
+            plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    },
+                    pointStart: 2010,
+                    animation: false
+                }
+            },
+
+            series: [
+                {% for serie in data.series %}
+                {
+                name : '{{ serie.name|escape('js') }}',
+                data: [{{serie.data| join(', ')}}],
+                },
+                {% endfor %}
+                ],
+
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 300
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'vertical',
+                            align: 'right',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            },
+            exporting: {
+                enabled: false
+            }
+
+        });
+    </script>
+</body>
+
+</html>
