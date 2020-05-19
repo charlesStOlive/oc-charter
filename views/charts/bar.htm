@@ -1,0 +1,26 @@
+<!--<h2>Test des images</h2>
+    <img id="demo"></img>-->
+<div id="adresse"></div>
+
+<script>
+    var chartObj = {
+                type: 'bar',
+                data: {
+                    labels: ['m1', 'm2', 'm3', 'm4', 'm5', 'm7', 'm8'],
+                    datasets: [{% for dataSet in data.dataSets %}
+                            {
+                                label : '{{ dataSet.name|escape('js') }}',
+                                data: [{{dataSet.data| join(', ')}}],
+                            },
+                        {% endfor %}]
+                }
+            }
+        const myFormatterFunction = function (value) {
+            return "$" + value
+        };
+        const chartStr = JSON.stringify(chartObj).replace('""', myFormatterFunction.toString());
+        // document.getElementById("demo").src =
+        //     "https://quickchart.io/chart?bkg=white&c=" + encodeURIComponent(chartStr);
+        document.getElementById("adresse").innerHTML = "https://quickchart.io/chart?bkg=white&c=" + encodeURIComponent(chartStr)
+        
+</script>

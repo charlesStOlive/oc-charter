@@ -6,9 +6,13 @@ fields:
     id:
         label: ID
         disabled: true
-
     name: 
         label: name
+    slug:
+        preset: name
+    config:
+        type: codeeditor
+        size: huge
+        language: js
 
-    options: 
-        code
+

@@ -24,6 +24,37 @@ class Charts extends Controller
         BackendMenu::setContext('Waka.Charter', 'charter', 'charts');
     }
 
+    public function test($id)
+    {
+        $data = $data = [
+            'title' => 'Attention ce sont de fausses données',
+            'subtitle' => "l'app n'a pas reçu de données",
+            'width' => 600,
+            'textyaxis' => null,
+            'dataSets' => [
+                [
+                    'name' => "serie 1",
+                    'data' => [43934, 52503, 57177, 69658, 97031, 119931, 137133, 125000],
+                ],
+                [
+                    'name' => "serie 2",
+                    'data' => [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434],
+                ],
+                [
+                    'name' => "serie 3",
+                    'data' => [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387],
+                ],
+            ],
+        ];
+        $view = $this->createView($data, 'bar');
+        $width = null;
+        trace_log($view);
+        return $view;
+
+        //return \SnappyImage::loadHTML($view)->setOption('width', $width)->setOption('format', 'jpeg')->inline();
+
+    }
+
     public function makeimg($id)
     {
         $filename = uniqid('oc');
@@ -31,7 +62,10 @@ class Charts extends Controller
         $data = null;
         $view = $this->createView($data, 'test');
 
+        return $view;
+
         $width = $data['width'] ?? 400;
+
         return \SnappyImage::loadHTML($view)->setOption('width', $width)->setOption('format', 'jpeg')->inline();
 
         // $snappy = \App::make('snappy.image');
@@ -69,7 +103,7 @@ class Charts extends Controller
                 'series' => [
                     [
                         'name' => "serie 1",
-                        'data' => [43934, 52503, 57177, 69658, 97031, 119931, 137133, 125000],
+                        'data' => [43934, 52503, 57177, 69658, 97031, 119931, 137133, 140000],
                     ],
                     [
                         'name' => "serie 2",

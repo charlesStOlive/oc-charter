@@ -37,7 +37,7 @@ class Chart extends Model
     /**
      * @var array Attributes to be cast to JSON
      */
-    protected $jsonable = ['options'];
+    protected $jsonable = ['config'];
 
     /**
      * @var array Attributes to be appended to the API representation of the model (ex. toArray())
@@ -72,21 +72,38 @@ class Chart extends Model
     public $attachOne = [];
     public $attachMany = [];
 
-    public function beforeSave()
+    public function afterSave()
     {
-        if (!$this->disk_name) {
-            $this->disk_name = uniqid('ch');
+        $data = [
+            'title' => 'Attention ce sont de fausses données',
+            'subtitle' => "l'app n'a pas reçu de données",
+            'width' => 600,
+            'textyaxis' => null,
+            'labels' => ['m1', 'm2', 'm3', 'm4', 'm5', 'm6', 'm7', 'm8'],
+            'dataSets' => [
+                [
+                    'name' => "serie 1",
+                    'data' => [43934, 52503, 57177, 69658, 97031, 119931, 137133, 140000],
+                ],
+                [
+                    'name' => "serie 2",
+                    'data' => [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434],
+                ],
+                [
+                    'name' => "serie 3",
+                    'data' => [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387],
+                ],
+            ],
+        ];
 
-        }
+        $url = \Twig::parse($this->config, compact('data'));
+        trace_log($url);
+        $url = urlencode(preg_replace("/\r|\n/", "", $url));
+        //$url = str_replace("++", "", $url);
+
+        trace_log("https://quickchart.io/chart?bkg=white&c=" . $url);
+
+        //trace_log($this->config['type']);
     }
 
-    public function getUrlAttribute()
-    {
-        if (!$this->disk_name) {
-            $this->disk_name = uniqid('ch');
-
-        }
-        return temp_path() . "/charts/" . $this->disk_name . '.jpeg';
-
-    }
 }

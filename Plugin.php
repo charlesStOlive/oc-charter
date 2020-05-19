@@ -1,6 +1,7 @@
 <?php namespace Waka\Charter;
 
 use Backend;
+use Lang;
 use System\Classes\PluginBase;
 
 /**
@@ -16,10 +17,10 @@ class Plugin extends PluginBase
     public function pluginDetails()
     {
         return [
-            'name'        => 'Charter',
+            'name' => 'Charter',
             'description' => 'No description provided yet...',
-            'author'      => 'Waka',
-            'icon'        => 'icon-leaf'
+            'author' => 'Waka',
+            'icon' => 'icon-leaf',
         ];
     }
 
@@ -69,7 +70,7 @@ class Plugin extends PluginBase
         return [
             'waka.charter.some_permission' => [
                 'tab' => 'Charter',
-                'label' => 'Some permission'
+                'label' => 'Some permission',
             ],
         ];
     }
@@ -85,11 +86,25 @@ class Plugin extends PluginBase
 
         return [
             'charter' => [
-                'label'       => 'Charter',
-                'url'         => Backend::url('waka/charter/mycontroller'),
-                'icon'        => 'icon-leaf',
+                'label' => 'Charter',
+                'url' => Backend::url('waka/charter/mycontroller'),
+                'icon' => 'icon-leaf',
                 'permissions' => ['waka.charter.*'],
-                'order'       => 500,
+                'order' => 500,
+            ],
+        ];
+    }
+    public function registerSettings()
+    {
+        return [
+            'charts' => [
+                'label' => Lang::get('waka.charter::lang.menu.charts'),
+                'description' => Lang::get('waka.charter::lang.menu.charts_description'),
+                'category' => Lang::get('waka.charter::lang.menu.settings_category'),
+                'icon' => 'icon-bar-chart',
+                'url' => Backend::url('waka/charter/charts'),
+                'permissions' => ['waka.charter.admin.*'],
+                'order' => 1,
             ],
         ];
     }
