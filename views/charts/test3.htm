@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+  <style>
+    .reportGraph {
+      width: 900px;
+      height: 300px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="reportGraph"><canvas id="canvas"></canvas></div>
+
+  <script type="text/javascript">
+    // wkhtmltopdf 0.12.5 crash fix.
+// https://github.com/wkhtmltopdf/wkhtmltopdf/issues/3242#issuecomment-518099192
+(function(setLineDash) {
+    CanvasRenderingContext2D.prototype.setLineDash = function() {
+        if(!arguments[0].length){
+            arguments[0] = [1,0];
+        }
+        // Now, call the original method
+        return setLineDash.apply(this, arguments);
+    };
+})(CanvasRenderingContext2D.prototype.setLineDash);
+Function.prototype.bind = Function.prototype.bind || function (thisp) {
+    var fn = this;
+    return function () {
+        return fn.apply(thisp, arguments);
+    };
+};
+var chartData = 
+  {
+  type: "line",
+  data: {
+    datasets: [{
+      data: [100, 50, 10, 300, 222, 150],
+      label: "Left dataset",
+
+      // This binds the dataset to the left y axis
+      yAxisID: "left-y-axis",
+    }, {
+      data: [0.1, 0.5, 1.0, 2.0, 1.5, 0],
+      label: "Right dataset",
+
+      // This binds the dataset to the right y axis
+      yAxisID: "right-y-axis",
+    }],
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+  },
+  options: {
+      animation:false,
+    scales: {
+      yAxes: [{
+        id: "left-y-axis",
+        type: "linear",
+        position: "left",
+      }, {
+        id: "right-y-axis",
+        type: "linear",
+        position: "right",
+      }],
+    }, 
+  },
+}
+
+function drawGraphs() {
+var chart = document.getElementById("canvas")
+// labels = chart.dataset.labels
+// set_1_data = chart.dataset.set_1_data
+// set_2_data = chart.dataset.set_2_data
+// set1_label = chart.dataset.set1_label
+// set2_label = chart.dataset.set2_label
+
+new Chart(chart, chartData);
+}
+window.onload = function() {
+    drawGraphs();
+};
+  </script>
+</body>
+
+</html>

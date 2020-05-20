@@ -46,13 +46,20 @@ class Charts extends Controller
                 ],
             ],
         ];
-        $view = $this->createView($data, 'bar');
+        $view = $this->createView($data, 'test3');
         $width = null;
-        trace_log($view);
+        //return $view;
+
+        return \SnappyImage::loadHTML($view)->setOption('width', $width)->setOption('format', 'jpeg')->inline();
+
+    }
+
+    public function testQuickChart()
+    {
+        $data = null;
+        $view = $this->createView($data, 'bar');
+        trace_log($view->render());
         return $view;
-
-        //return \SnappyImage::loadHTML($view)->setOption('width', $width)->setOption('format', 'jpeg')->inline();
-
     }
 
     public function makeimg($id)
