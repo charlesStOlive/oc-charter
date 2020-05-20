@@ -57,8 +57,12 @@ class Charts extends Controller
     public function testQuickChart()
     {
         $data = null;
-        $view = $this->createView($data, 'bar');
-        trace_log($view->render());
+        $data = [
+            "labels" => [100, 50, 10, 300, 222, 150],
+            'data_set_1' => [0.1, 0.5, 1.0, 2.0, 1.5, 0],
+            'data_set_2' => ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        ];
+        $view = $this->createView($data, 'test3')->withData($data);
         return $view;
     }
 
