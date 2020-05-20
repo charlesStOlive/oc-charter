@@ -47,6 +47,8 @@ class Charts extends Controller
         $filepath = public_path() . $fileAdress;
         //return \SnappyImage::loadHTML($view)
         \SnappyImage::loadHTML($view)
+            ->setOption('width', $data['width'])
+            ->setOption('height', $data['height'])
             ->setOption('format', 'jpeg')
             ->save($filepath);
         //->inline();

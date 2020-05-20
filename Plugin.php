@@ -1,7 +1,6 @@
 <?php namespace Waka\Charter;
 
 use Backend;
-use Lang;
 use System\Classes\PluginBase;
 
 /**
@@ -94,18 +93,18 @@ class Plugin extends PluginBase
             ],
         ];
     }
-    public function registerSettings()
-    {
-        return [
-            'charts' => [
-                'label' => Lang::get('waka.charter::lang.menu.charts'),
-                'description' => Lang::get('waka.charter::lang.menu.charts_description'),
-                'category' => Lang::get('waka.charter::lang.menu.settings_category'),
-                'icon' => 'icon-bar-chart',
-                'url' => Backend::url('waka/charter/charts'),
-                'permissions' => ['waka.charter.admin.*'],
-                'order' => 1,
-            ],
-        ];
-    }
+    // public function registerSettings()
+    // {
+    //     return [
+    //         'charts' => [
+    //             'label' => Lang::get('waka.charter::lang.menu.charts'),
+    //             'description' => Lang::get('waka.charter::lang.menu.charts_description'),
+    //             'category' => Lang::get('waka.charter::lang.menu.settings_category'),
+    //             'icon' => 'icon-bar-chart',
+    //             'url' => Backend::url('waka/charter/charts'),
+    //             'permissions' => ['waka.charter.admin.*'],
+    //             'order' => 1,
+    //         ],
+    //     ];
+    // }
 }
