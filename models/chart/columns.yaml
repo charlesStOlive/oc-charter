@@ -6,6 +6,3 @@ columns:
     name:
         label: Nom
         searchable: true
-    slug:
-        label: Slug
-        searchable: true

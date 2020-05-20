@@ -11,10 +11,7 @@ class CreateChartsTable extends Migration
         Schema::create('waka_charter_charts', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->string('name');
-            $table->string('slug');
-            $table->text('config')->nullable();
-            $table->text('datasets')->nullable();
+            $table->string('name')->nullable();
             $table->timestamps();
         });
     }

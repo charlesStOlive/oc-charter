@@ -24,65 +24,36 @@ class Charts extends Controller
         BackendMenu::setContext('Waka.Charter', 'charter', 'charts');
     }
 
-    public function test($id)
+    private function makeChartFromData($data, $type)
     {
-        $data = $data = [
-            'title' => 'Attention ce sont de fausses données',
-            'subtitle' => "l'app n'a pas reçu de données",
-            'width' => 600,
-            'textyaxis' => null,
-            'dataSets' => [
-                [
-                    'name' => "serie 1",
-                    'data' => [43934, 52503, 57177, 69658, 97031, 119931, 137133, 125000],
-                ],
-                [
-                    'name' => "serie 2",
-                    'data' => [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434],
-                ],
-                [
-                    'name' => "serie 3",
-                    'data' => [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387],
-                ],
-            ],
-        ];
-        $view = $this->createView($data, 'test3');
-        $width = null;
-        //return $view;
-
-        return \SnappyImage::loadHTML($view)->setOption('width', $width)->setOption('format', 'jpeg')->inline();
-
-    }
-
-    public function testQuickChart()
-    {
-        $data = null;
-        $data = [
-            "labels" => [100, 50, 10, 300, 222, 150],
-            'data_set_1' => [0.1, 0.5, 1.0, 2.0, 1.5, 0],
-            'data_set_2' => ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-        ];
-        $view = $this->createView($data, 'test3')->withData($data);
+        $view = \View::make('waka.charter::charts.' . $type)->withData($data);
         return $view;
     }
 
-    public function makeimg($id)
+    public function makeChartUrl($data = null, $type = null)
     {
+        if (!$type) {
+            $type = '2bars';
+        }
+
+        if (!$data) {
+            $data = $this->getDataExemple($type);
+        }
+
+        $view = \View::make('waka.charter::charts.' . $type)->withData($data);
+
         $filename = uniqid('oc');
-        $filepath = temp_path() . "/charts/" . $filename;
-        $data = null;
-        $view = $this->createView($data, 'test');
+        $fileAdress = "/storage/app/media/charts/" . $filename . '.jpeg';
+        $filepath = public_path() . $fileAdress;
+        //return \SnappyImage::loadHTML($view)
+        \SnappyImage::loadHTML($view)
+            ->setOption('format', 'jpeg')
+            ->save($filepath);
+        //->inline();
 
-        return $view;
-
-        $width = $data['width'] ?? 400;
-
-        return \SnappyImage::loadHTML($view)->setOption('width', $width)->setOption('format', 'jpeg')->inline();
-
-        // $snappy = \App::make('snappy.image');
-        // $snappy->generateFromHtml($view, $filepath);
-        // return $filepath;
+        return \Config::get('app.url') . $fileAdress;
     }
+
     public function createurl($id)
     {
         $chart = Chart::find($id);
@@ -103,40 +74,32 @@ class Charts extends Controller
         return $chart->url;
     }
 
-    public function createView($data, $template = "test")
+    public function getDataExemple($type)
     {
-        if (!$data) {
-            $data = [
-                'title' => 'Attention ce sont de fausses données',
-                'subtitle' => "l'app n'a pas reçu de données",
-                'width' => 600,
-                'textyaxis' => null,
-                'series' => [
-                    [
-                        'name' => "serie 1",
-                        'data' => [43934, 52503, 57177, 69658, 97031, 119931, 137133, 140000],
-                    ],
-                    [
-                        'name' => "serie 2",
-                        'data' => [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434],
-                    ],
-                    [
-                        'name' => "serie 3",
-                        'data' => [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387],
-                    ],
-                    [
-                        'name' => "serie 4",
-                        'data' => [0, 0, 7988, 12169, 15112, 22452, 34400, 34227],
-                    ],
-                    [
-                        'name' => "serie 5",
-                        'data' => [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111],
-                    ],
-
-                ],
+        if ($type == "l_line_r_bar") {
+            return [
+                "labels" => ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+                'set_l' => [100, 50, 10, 300, 222, 150],
+                'set_r' => [10, 8, 1, 15, 16, 12],
+                'set_l_label' => "CA HT",
+                'set_r_label' => "NB ventes",
+                'set_l_title' => "€ HT",
+                'set_r_title' => "Nb",
+                'width' => 500,
+                'height' => 500,
             ];
         }
-        return \View::make('waka.charter::charts.' . $template)->withData($data);
-
+        if ($type == "2bars") {
+            return [
+                "labels" => ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+                'set_l' => [100, 50, 10, 300, 222, 150],
+                'set_r' => [80, 45, 12, 280, 200, 100],
+                'set_l_label' => "CA 2020",
+                'set_r_label' => "CA 2019",
+                'width' => 500,
+                'height' => 500,
+            ];
+        }
     }
+
 }
