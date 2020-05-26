@@ -36,8 +36,8 @@
                     data: {{  data.set_l | toJson  }},
                     label: '{{  data.set_l_label }}',
                     type: 'line',
-                    lineTension: 0,  
-                    borderColor:'{{  data.set_l_color|default('#000000') }}',
+                    lineTension: 0.3,  
+                    borderColor:'{{  data.set_l_color|defaultConfig("colors.primary") }}',
                     fill: false,
 
                     // This binds the dataset to the left y axis
@@ -45,8 +45,7 @@
                 }, {
                     data: {{  data.set_r | toJson }},
                     label: '{{  data.set_r_label }}',
-                    backgroundColor: '{{  data.set_l_color|default('#CCCCC') }}',
-
+                    backgroundColor: '{{  data.set_l_color|defaultConfig("colors.secondary")}}',
                     // This binds the dataset to the right y axis
                     yAxisID: "right-y-axis",
                     
@@ -58,20 +57,28 @@
                 scales: {
                     yAxes: [{
                         id: "left-y-axis",
-                
                         position: "left",
+                        {% if data.set_l_title %}
                         scaleLabel: {
-                          display: true,
-                          labelString: '{{  data.set_l_title }}'
-                        }
+                            display: true,
+                            labelString: '{{  data.set_l_title }}'
+                        },
+                        {% endif %}
+                        ticks: {
+                            beginAtZero: {{  data.beginAtZero | default('false') }}
+                        },
                     }, {
                         id: "right-y-axis",
-
                         position: "right",
+                        {% if data.set_r_title %}
                         scaleLabel: {
                           display: true,
                           labelString: '{{  data.set_r_title }}'
-                        }
+                        },
+                        {% endif %}
+                        ticks: {
+                            beginAtZero: {{  data.beginAtZero | default('false') }}
+                        },
                     }],
                 },
             },
