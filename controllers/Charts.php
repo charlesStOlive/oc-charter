@@ -24,23 +24,25 @@ class Charts extends Controller
         BackendMenu::setContext('Waka.Charter', 'charter', 'charts');
     }
 
-    private function makeChartFromData($data, $type)
-    {
-        $view = \View::make('waka.charter::charts.' . $type)->withData($data);
-        return $view;
-    }
+    // private function makeChartFromData($data, $type)
+    // {
+    //     $view = \View::make('waka.charter::charts.' . $type)->withData($data);
+    //     return $view;
+    // }
 
-    public function makeChartUrl($data = null, $type = null)
+    public function makeChartUrl($data = null, $type = null, $plugins = "waka.charter::charts")
     {
         if (!$type) {
-            $type = '2bars';
+            $type = 'doughnut';
         }
 
         if (!$data) {
             $data = $this->getDataExemple($type);
         }
 
-        $view = \View::make('waka.charter::charts.' . $type)->withData($data);
+        //trace_log($data);
+
+        $view = \View::make($plugins . '.' . $type)->withData($data);
 
         $filename = uniqid('oc');
         $fileAdress = "/storage/app/media/charts/" . $filename . '.jpeg';
@@ -100,6 +102,22 @@ class Charts extends Controller
                 'set_r_label' => "CA 2019",
                 'width' => 500,
                 'height' => 500,
+            ];
+        }
+        $mainColor = \Config::get('waka.crsm::colors.primary');
+        $colors = new \Waka\Utils\Classes\PhpColors($mainColor);
+        if ($type == "pie") {
+            return [
+                "labels" => ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+                'set' => [100, 50, 10, 300, 222, 150],
+                'backgroundColors' => $colors->getColorsArray(6),
+            ];
+        }
+        if ($type == "doughnut") {
+            return [
+                "labels" => ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+                'set' => [100, 50, 10, 300, 222, 150],
+                'backgroundColors' => $colors->getColorsArray(6),
             ];
         }
     }

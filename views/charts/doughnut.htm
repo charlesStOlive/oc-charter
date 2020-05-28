@@ -32,18 +32,11 @@
             };
         };
         var chartData = {
-            type: "bar",
+            type: "doughnut",
             data: {
                 datasets: [{
-                    data: {{  data.set_l | toJson  }},
-                    label: '{{  data.set_l_label }}',
-                    backgroundColor:'{{  data.set_l_color|defaultConfig("colors.primary") }}',
-                    fill: false,
-                }, {
-                    data: {{  data.set_r | toJson }},
-                    label: '{{  data.set_r_label }}',
-                    backgroundColor: '{{  data.set_l_color|defaultConfig("colors.secondary") }}',
-                    
+                    data: {{  data.set | toJson  }},
+                    backgroundColor: {{ data.backgroundColors | toJson }}, 
                 }],
                 labels: {{  data.labels | toJson }},
             },
