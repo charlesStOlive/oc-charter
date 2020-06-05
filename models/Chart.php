@@ -75,7 +75,7 @@ class Chart extends Model
     public function makeUrl($data)
     {
         $url = \Twig::parse($this->config, compact('data'));
-        trace_log($url);
+        //trace_log($url);
         $url = urlencode(preg_replace("/\r|\n/", "", $url));
         return "https://quickchart.io/chart?bkg=white&c=" . $url;
     }
@@ -110,11 +110,11 @@ class Chart extends Model
         ];
 
         $url = \Twig::parse($this->config, compact('data'));
-        trace_log($url);
+        //trace_log($url);
         $url = preg_replace('/\s+/S', "", $url);
         //$url = str_replace("++", "", $url);
 
-        trace_log("https://quickchart.io/chart?bkg=white&c=" . $url);
+        //trace_log("https://quickchart.io/chart?bkg=white&c=" . $url);
 
         //trace_log($this->config['type']);
     }
