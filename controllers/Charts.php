@@ -104,7 +104,7 @@ class Charts extends Controller
                 'height' => 500,
             ];
         }
-        $mainColor = \Config::get('waka.crsm::colors.primary');
+        $mainColor = \Config::get('waka.wconfig::colors.primary');
         $colors = new \Waka\Utils\Classes\PhpColors($mainColor);
         if ($type == "pie") {
             return [
