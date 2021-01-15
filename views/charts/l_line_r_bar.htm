@@ -9,8 +9,11 @@
 <body>
 
     <div style="width: {{data.width| default(500)}}px;height: {{data.height| default(500)}}px">
-        <div class="reportGraph" style="position:relative;margin:auto;width:90%;height:90% ;">
-            <canvas style="width:100%;height:100%;" id="canvas"></canvas></div>
+        <div class="reportGraph"
+             style="position:relative;margin:auto;width:90%;height:90% ;">
+            <canvas style="width:100%;height:100%;"
+                    id="canvas"></canvas>
+        </div>
     </div>
 
     <script type="text/javascript">
@@ -35,52 +38,52 @@
             type: "bar",
             data: {
                 datasets: [{
-                    data: {{  data.set_l | toJson  }},
-                    label: '{{  data.set_l_label }}',
-                    type: 'line',
-                    lineTension: 0.3,  
-                    borderColor:'{{  data.set_l_color|defaultConfig("colors.primary") }}',
-                    fill: false,
+                    data: {{ data.set_l | toJson }},
+            label: '{{  data.set_l_label }}',
+            type: 'line',
+            lineTension: 0.3,
+            borderColor: '{{  data.set_l_color|defaultConfig("colors.primary") }}',
+            fill: false,
 
-                    // This binds the dataset to the left y axis
-                    yAxisID: "left-y-axis",
-                }, {
-                    data: {{  data.set_r | toJson }},
-                    label: '{{  data.set_r_label }}',
-                    backgroundColor: '{{  data.set_l_color|defaultConfig("colors.secondary")}}',
-                    // This binds the dataset to the right y axis
-                    yAxisID: "right-y-axis",
+            // This binds the dataset to the left y axis
+            yAxisID: "left-y-axis",
+        }, {
+            data: {{ data.set_r | toJson }},
+        label: '{{  data.set_r_label }}',
+            backgroundColor: '{{  data.set_l_color|defaultConfig("colors.secondary")}}',
+                // This binds the dataset to the right y axis
+                yAxisID: "right-y-axis",
                     
                 }],
-                labels: {{  data.labels | toJson }},
+        labels: { { data.labels | toJson } },
             },
-            options: {
-                animation: false,
+        options: {
+            animation: false,
                 scales: {
-                    yAxes: [{
-                        id: "left-y-axis",
-                        position: "left",
+                yAxes: [{
+                    id: "left-y-axis",
+                    position: "left",
                         {% if data.set_l_title %}
-                        scaleLabel: {
-                            display: true,
-                            labelString: '{{  data.set_l_title }}'
-                        },
-                        {% endif %}
-                        ticks: {
-                            beginAtZero: {{  data.beginAtZero | default('false') }}
-                        },
-                    }, {
-                        id: "right-y-axis",
-                        position: "right",
-                        {% if data.set_r_title %}
-                        scaleLabel: {
-                          display: true,
-                          labelString: '{{  data.set_r_title }}'
-                        },
-                        {% endif %}
-                        ticks: {
-                            beginAtZero: {{  data.beginAtZero | default('false') }}
-                        },
+            scaleLabel: {
+                display: true,
+                    labelString: '{{  data.set_l_title }}'
+            },
+            {% endif %}
+            ticks: {
+                beginAtZero: { { data.beginAtZero | default ('false') } }
+            },
+        }, {
+            id: "right-y-axis",
+                position: "right",
+                    {% if data.set_r_title %}
+        scaleLabel: {
+            display: true,
+                labelString: '{{  data.set_r_title }}'
+        },
+        {% endif %}
+        ticks: {
+            beginAtZero: { { data.beginAtZero | default ('false') } }
+        },
                     }],
                 },
             },

@@ -1,0 +1,66 @@
+<div style="width:<?=$width?>;height:<?=$height?>">
+    <div class="reportGraph"
+         style="position:relative;margin:auto;width:90%;height:90% ;">
+        <canvas id="myChart"
+                data-options='<?= $options ?>'
+                data-chartdata='<?= $chartdata ?>'
+                style="width:100%;height:100%;"></canvas>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+<script>
+    'use strict';
+    (function (setLineDash) {
+        CanvasRenderingContext2D.prototype.setLineDash = function () {
+            if (!arguments[0].length) {
+                arguments[0] = [1, 0];
+            }
+            // Now, call the original method
+            return setLineDash.apply(this, arguments);
+        };
+    })(CanvasRenderingContext2D.prototype.setLineDash);
+    Function.prototype.bind = Function.prototype.bind || function (thisp) {
+        var fn = this;
+        return function () {
+            return fn.apply(thisp, arguments);
+        };
+    };
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var graph = document.getElementById('myChart');
+
+    var options = JSON.parse(graph.dataset.options)
+    var chartdata = JSON.parse(graph.dataset.chartdata)
+
+    var datas = {
+        type: options.type,
+        data: chartdata,
+        options: {
+            maintainAspectRatio: false,
+            animation: false,
+            scales: {
+                yAxes: [
+                    {
+                        type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: 'left',
+                        id: 'y_1',
+                        ticks: {
+                            beginAtZero: (options.beginAtZero == '1')
+                        }
+
+                    }, {
+                        type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: 'right',
+                        id: 'y_2',
+                        ticks: {
+                            beginAtZero: (options.beginAtZero == '1')
+                        }
+                    }
+
+                ],
+            }
+        }
+    }
+    var myChart = new Chart(ctx, datas);
+</script>

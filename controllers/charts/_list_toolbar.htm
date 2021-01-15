@@ -1,21 +1,26 @@
 <div data-control="toolbar">
-    <a
-        href="<?= Backend::url('waka/charter/charts/create') ?>"
-        class="btn btn-primary oc-icon-plus">
+    <a href="<?= Backend::url('waka/charter/charts/create') ?>"
+       class="btn btn-primary oc-icon-plus">
         New Chart
     </a>
 
-    <button
-        class="btn btn-danger oc-icon-trash-o"
-        disabled="disabled"
-        onclick="$(this).data('request-data', { checked: $('.control-list').listWidget('getChecked') })"
-        data-request="onDelete"
-        data-request-confirm="Are you sure you want to delete the selected Charts?"
-        data-trigger-action="enable"
-        data-trigger=".control-list input[type=checkbox]"
-        data-trigger-condition="checked"
-        data-request-success="$(this).prop('disabled', 'disabled')"
-        data-stripe-load-indicator>
+    <button class="btn btn-danger oc-icon-trash-o"
+            disabled="disabled"
+            onclick="$(this).data('request-data', { checked: $('.control-list').listWidget('getChecked') })"
+            data-request="onDelete"
+            data-request-confirm="Are you sure you want to delete the selected Charts?"
+            data-trigger-action="enable"
+            data-trigger=".control-list input[type=checkbox]"
+            data-trigger-condition="checked"
+            data-request-success="$(this).prop('disabled', 'disabled')"
+            data-stripe-load-indicator>
         Delete selected
+    </button>
+    <button href="javascript:;"
+            class="btn btn-default oc-icon-external-link "
+            data-request-data="redirect:0, "
+            data-control="popup"
+            data-handler="onTest">
+        Nouveau chart + url
     </button>
 </div>
