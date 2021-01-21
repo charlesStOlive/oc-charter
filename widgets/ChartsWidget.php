@@ -48,7 +48,7 @@ class ChartsWidget extends WidgetBase
 
     public function createOptions($options)
     {
-        trace_log($options);
+        //trace_log($options);
         $this->options = [
             'type' => $options['type'] ?? 'bar',
             'beginAtZero' => $options['beginAtZero'] ?? true,
