@@ -24,5 +24,4 @@ class Charts extends Controller
 
         BackendMenu::setContext('Waka.Charter', 'charter', 'charts');
     }
-
 }

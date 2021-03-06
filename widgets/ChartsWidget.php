@@ -43,7 +43,6 @@ class ChartsWidget extends WidgetBase
         } else {
             return $this->makePartial($this->partial);
         }
-
     }
 
     public function createOptions($options)
@@ -54,7 +53,6 @@ class ChartsWidget extends WidgetBase
             'beginAtZero' => $options['beginAtZero'] ?? true,
             'cutoutPercentage' => $options['cutoutPercentage'] ?? 0,
         ];
-
     }
 
     public function addColorsOptions($options)
@@ -90,5 +88,4 @@ class ChartsWidget extends WidgetBase
     {
         $this->addJs('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js');
     }
-
 }

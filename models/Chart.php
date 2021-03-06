@@ -118,5 +118,4 @@ class Chart extends Model
 
         //trace_log($this->config['type']);
     }
-
 }

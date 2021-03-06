@@ -43,7 +43,6 @@ class ChartsBehavior extends ControllerBehavior
         $this->vars['colors'] = $colors;
 
         return $this->makePartial('$/waka/charter/controllers/charts/_popup.htm');
-
     }
 
     public function createChartUrl($chartData, $partial, $options, $width, $height)
@@ -66,7 +65,6 @@ class ChartsBehavior extends ControllerBehavior
             ->save($filepath);
         //->inline();
         return \Config::get('app.url') . $fileAdress;
-
     }
 
     public function onTest()
@@ -155,5 +153,4 @@ class ChartsBehavior extends ControllerBehavior
 
         return $this->createChart($chartData, $partial, $options, $width, $height);
     }
-
 }
