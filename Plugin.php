@@ -32,6 +32,13 @@ class Plugin extends PluginBase
     {
     }
 
+    public function registerFormWidgets(): array
+    {
+        return [
+            'Waka\Charter\FormWidgets\ChartFormWidget' => 'chartform',
+        ];
+    }
+
     /**
      * Boot method, called right before the request route.
      *

@@ -9,40 +9,51 @@ class ChartsWidget extends WidgetBase
      */
     protected $defaultAlias = 'chart';
 
-    public $chartdata;
-    public $partial;
+    public $chartDatas;
+    public $chartType;
     public $options;
     public $width;
     public $height;
     public $type;
+    public $periode;
 
-    public function create($chartdata, $partial, $options, $width, $height)
+    public function setChartType($type) {
+        $this->chartType = $type;
+        return $this;
+    }
+    public function setChartDatas($datas) {
+        $this->chartDatas = $datas;
+        return $this; 
+    }
+    
+    public function setChartOptions($options) {
+        $this->createOptions($options);
+        $this->addColorsOptions($options);
+        return $this;
+    }
+
+    public function create($width, $height)
     {
         $this->width = $width;
         $this->height = $height;
-
-        $this->partial = $partial;
-
-        $this->createOptions($options);
-        $this->chartdata = $chartdata;
-        $this->addColorsOptions($options);
-
         return $this->render();
     }
 
     public function render()
     {
 
+        $this->vars['chartID'] = $this->options['id'] ?? null;
+        $this->vars['chartdata'] = json_encode($this->chartDatas);
         $this->vars['options'] = json_encode($this->options);
-        $this->vars['chartdata'] = json_encode($this->chartdata);
         $this->vars['width'] = $this->width . 'px';
         $this->vars['height'] = $this->height . 'px';
+        //trace_log($this->chartType);
+        //trace_log(json_encode($this->chartDatas));
+        //trace_log(json_encode($this->options));
+        //trace_log($this->width . 'px');
+        //trace_log($this->height . 'px');
 
-        if ($this->type == "doughnut") {
-            return $this->makePartial('pie');
-        } else {
-            return $this->makePartial($this->partial);
-        }
+        return $this->makePartial($this->chartType);
     }
 
     public function createOptions($options)
@@ -50,42 +61,44 @@ class ChartsWidget extends WidgetBase
         //trace_log($options);
         $this->options = [
             'type' => $options['type'] ?? 'bar',
+            //ID pour affichage de plusieurs graphes dans une même page web. L'id est ajouté à créate options dans le chartFormWidget
+            'id' => $options['id'] ?? null,
             'beginAtZero' => $options['beginAtZero'] ?? true,
             'cutoutPercentage' => $options['cutoutPercentage'] ?? 0,
         ];
+        
     }
 
     public function addColorsOptions($options)
     {
         $degrade = $options['degrade'] ?? false;
-
-        $dataSets = $this->chartdata['datasets'];
+        $dataSets = $this->chartDatas['datasets'];
         $nbDataSets = count($dataSets);
 
         $type = $options['type'] ?? 'bar';
 
-        if ($this->partial == 'pie_or_doughnut') {
-            $nbValue = count($this->chartdata['labels']);
+        if ($this->chartType == 'pie_or_doughnut') {
+            $nbValue = count($this->chartDatas['labels']);
             //trace_log($nbValue);
             $colors = \Waka\Utils\Classes\PhpColors::getSeparate($nbValue);
-            $this->chartdata['datasets'][0]['backgroundColor'] = $colors;
+            $this->chartDatas['datasets'][0]['backgroundColor'] = $colors;
         } else {
             $colors = \Waka\Utils\Classes\PhpColors::getSeparate($nbDataSets);
             $i = 0;
 
             foreach ($dataSets as $key => $dataset) {
                 if ($type == "bar") {
-                    $this->chartdata['datasets'][$key]['backgroundColor'] = $colors[$i];
+                    $this->chartDatas['datasets'][$key]['backgroundColor'] = $colors[$i];
                 } else {
-                    $this->chartdata['datasets'][$key]['borderColor'] = $colors[$i];
+                    $this->chartDatas['datasets'][$key]['borderColor'] = $colors[$i];
                 }
                 $i++;
             }
         }
     }
 
-    public function loadAssets()
-    {
-        $this->addJs('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js');
-    }
+    // protected function loadAssets()
+    // {
+    //     $this->addJs('/plugins/waka/charter/widgets/chartswidget/assets/js/wakachart.js');
+    // }
 }

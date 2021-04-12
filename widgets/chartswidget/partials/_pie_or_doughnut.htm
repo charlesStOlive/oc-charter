@@ -1,5 +1,5 @@
 <div style="width:<?=$width?>;height:<?=$height?>">
-    <div class="reportGraph"
+    <div class="reportGraph" class="wakaChartCanvas"
          style="position:relative;margin:auto;width:90%;height:90% ;">
         <canvas id="myChart"
                 data-options='<?= $options ?>'
@@ -9,35 +9,36 @@
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
 <script>
-    'use strict';
-    (function (setLineDash) {
-        CanvasRenderingContext2D.prototype.setLineDash = function () {
-            if (!arguments[0].length) {
-                arguments[0] = [1, 0];
-            }
-            // Now, call the original method
-            return setLineDash.apply(this, arguments);
-        };
-    })(CanvasRenderingContext2D.prototype.setLineDash);
-    Function.prototype.bind = Function.prototype.bind || function (thisp) {
-        var fn = this;
-        return function () {
-            return fn.apply(thisp, arguments);
-        };
+'use strictez';
+(function(setLineDash) {
+    CanvasRenderingContext2D.prototype.setLineDash = function() {
+        if (!arguments[0].length) {
+            arguments[0] = [1, 0];
+        }
+        // Now, call the original method
+        return setLineDash.apply(this, arguments);
     };
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var graph = document.getElementById('myChart');
+})(CanvasRenderingContext2D.prototype.setLineDash);
+Function.prototype.bind = Function.prototype.bind || function(thisp) {
+    var fn = this;
+    return function() {
+        return fn.apply(thisp, arguments);
+    };
+};
 
-    var options = JSON.parse(graph.dataset.options)
-    var chartdata = JSON.parse(graph.dataset.chartdata)
+var ctx = document.getElementById('myChart').getContext('2d');
+var graph = document.getElementById('myChart');
 
-    var datas = {
-        type: options.type,
-        data: chartdata,
-        options: {
-            maintainAspectRatio: false,
-            animation: false,
-        },
-    }
-    var myChart = new Chart(ctx, datas);
+var options = JSON.parse(graph.dataset.options)
+var chartdata = JSON.parse(graph.dataset.chartdata)
+
+var datas = {
+    type: options.type,
+    data: chartdata,
+    options: {
+        maintainAspectRatio: false,
+        animation: false,
+    },
+}
+var myChart = new Chart(ctx, datas);
 </script>

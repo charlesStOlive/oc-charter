@@ -1,5 +1,17 @@
 <?php
 return [
+    'chartModel' => [
+        'pie_or_doughnut' => [
+            'label' => "Anneau/Circulaire"
+        ],
+        'bar_or_line' => [
+            'label' => 'Bar ou ligne'
+
+        ],
+        'bar_or_line_2_axis' => [
+            'label' => 'Bar ou ligne, 2 axes'
+        ],
+    ],
     'fnc_fields' => [
         'beginAtZero' => [
             'type' => 'switch',

@@ -2,12 +2,17 @@
 
 use Backend\Classes\ControllerBehavior;
 use Waka\Charter\Widgets\ChartsWidget;
+use Waka\Utils\Classes\TmpFiles;
 
 class ChartsBehavior extends ControllerBehavior
 {
 
     //protected $exportExcelWidget;
+    public $chartType;
     public $chartWidget;
+    private $chartOptions;
+    private $chartDatas;
+    
 
     public function __construct($controller)
     {
@@ -18,53 +23,128 @@ class ChartsBehavior extends ControllerBehavior
         $this->chartWidget = new ChartsWidget($controller);
         $this->chartWidget->alias = 'chartWidget';
         $this->chartWidget->bindToController();
+        $this->chartOptions = [];
+
     }
 
-    public function createChart($chartData, $partial, $options, $width, $height)
+    //  public static function find($code)
+    // {
+    //     $chartType;
+    //     $chartModels = Config::get('chartModel');
+    //     $chartType = $chartModels[$code] ?? null;
+    //     if (!$chartType) {
+    //         throw new ApplicationException("Problème de configuration de chartModels");
+    //     }
+    //     self::$chartType = $chartType;
+    //     return new self;
+    // }
+
+    public function setChartType($type) {
+        $this->chartType = $type;
+        return $this;
+    }
+
+    public function setChartDatas($datas) {
+        $this->chartDatas = $datas;
+        return $this;
+
+    }
+    public function addChartDatas($datas) {
+        if(!$this->chartDatas) {
+            $this->chartDatas = [];
+        }
+        $this->chartDatas = array_merge($this->chartDatas, $datas);
+        return $this;
+    }
+    
+    public function addChartOptions($options) {
+        $this->chartOptions = array_merge($this->chartOptions, $options);
+        return $this;
+    }
+    public function setChartOptions($datas) {
+        $this->chartOptions = $datas;
+        return $this;
+    }
+    //
+    public function addManualDataSet(string $label, array $data) {
+        
+        $dataSet = [
+            'label' => $label,
+            'data' => $data,
+        ];
+        //trace_log('Manual dataset');
+        //trace_log($dataSet);
+
+        $this->addDataSet($dataSet);
+        return $this;
+    }
+    //
+    public function addDataSet($_dataSet) {
+        if(!$this->chartDatas) {
+            $this->chartDatas = [];
+        }
+        $datasets = $this->chartDatas['datasets'] ?? false;
+        if(!$datasets) {
+            $this->chartDatas['datasets'] = [];
+        }
+        $twoAxis = false;
+        if($this->chartType == 'bar_or_line_2_axis') {
+            $twoAxis = true;
+        }
+
+        if($twoAxis) {
+            $countDataSet = 0;
+            if(is_countable($this->chartDatas['datasets'])) {
+                $countDataSet =  count($this->chartDatas['datasets']);
+            }
+            $countDataSet += 1;
+            $_dataSet['yAxisID'] = 'y_'. $countDataSet;
+        }
+        array_push($this->chartDatas['datasets'], $_dataSet);
+        return $this; 
+    }
+    
+    public function addlabels($labels) {
+        if(!$this->chartDatas) {
+            $this->chartDatas = [];
+        }
+        $this->chartDatas['labels'] = $labels;
+        return $this; 
+    }
+
+    //ancien nom : createChart
+    public function renderChart($width, $height)
     {
-        $htm = $this->chartWidget->create($chartData, $partial, $options, $width, $height);
+        $htm = $this->chartWidget->setChartType($this->chartType)
+                ->setChartDatas($this->chartDatas)
+                ->setChartOptions($this->chartOptions)
+                ->create($width, $height);
+        //trace_log($htm);
+        return  $htm;
+    }
+
+    //ancien nom : createChartUrl
+    public function getChartUrl($width, $height)
+    {
+        $htm = $this->chartWidget->setChartType($this->chartType)
+                ->setChartDatas($this->chartDatas)
+                ->setChartOptions($this->chartOptions)
+                ->create($width, $height);
+
         //trace_log($htm);
 
-        $filename = uniqid('oc');
-        $fileAdress = "/storage/app/media/charts/" . $filename . '.jpeg';
-        $filepath = public_path() . $fileAdress;
+        $tmpfile =  TmpFiles::createDirectory()->emptyFile("chart.jpeg");
+        //trace_log($tmpfile->getFilePath());
         \SnappyImage::loadHTML($htm)
             ->setOption('width', $width)
             ->setOption('height', $height)
             ->setOption('enable-javascript', true)
-            ->setOption('javascript-delay', 500)
+            ->setOption('javascript-delay', 100)
             ->setOption('format', 'jpeg')
-            ->save($filepath);
+            ->save($tmpfile->getFilePath());
         //->inline();
-        $this->vars['chartUrlWidget'] = \Config::get('app.url') . $fileAdress;
-        $this->vars['chartWidget'] = $htm;
-
-        $colors = \Waka\Utils\Classes\PhpColors::getSeparate(4);
-        $this->vars['colors'] = $colors;
-
-        return $this->makePartial('$/waka/charter/controllers/charts/_popup.htm');
-    }
-
-    public function createChartUrl($chartData, $partial, $options, $width, $height)
-    {
-        //trace_log($chartData);
-        //trace_log($options);
-
-        $htm = $this->chartWidget->create($chartData, $partial, $options, $width, $height);
-        //trace_log($htm);
-
-        $filename = uniqid('oc');
-        $fileAdress = "/storage/app/media/charts/" . $filename . '.jpeg';
-        $filepath = public_path() . $fileAdress;
-        \SnappyImage::loadHTML($htm)
-            ->setOption('width', $width)
-            ->setOption('height', $height)
-            ->setOption('enable-javascript', true)
-            ->setOption('javascript-delay', 500)
-            ->setOption('format', 'jpeg')
-            ->save($filepath);
-        //->inline();
-        return \Config::get('app.url') . $fileAdress;
+        //trace_log($tmpfile->getFileUrl());
+        return $tmpfile->getFileUrl();
     }
 
     public function onTest()
@@ -77,7 +157,7 @@ class ChartsBehavior extends ControllerBehavior
         ];
         $width = 500;
         $height = 500;
-        $chartData = [
+        $chartDatas = [
             'labels' => ['2021-quarter-1', '2020-quarter-4', '2020-quarter-3', '2020-quarter-2', '2020-quarter-1', '2019-quarter-4'],
             'datasets' => [
                 [
@@ -95,7 +175,7 @@ class ChartsBehavior extends ControllerBehavior
         // ];
         // $width = 500;
         // $height = 500;
-        // $chartData = [
+        // $chartDatas = [
         //     'labels' => ['2021-quarter-1', '2020-quarter-4', '2020-quarter-3', '2020-quarter-2', '2020-quarter-1', '2019-quarter-4'],
         //     'datasets' => [
         //         [
@@ -118,7 +198,7 @@ class ChartsBehavior extends ControllerBehavior
         // ];
         // $width = 500;
         // $height = 500;
-        // $chartData = [
+        // $chartDatas = [
         //     'labels' => ['2021-quarter-1', '2020-quarter-4', '2020-quarter-3', '2020-quarter-2', '2020-quarter-1', '2019-quarter-4'],
         //     'datasets' => [
         //         [
@@ -135,7 +215,7 @@ class ChartsBehavior extends ControllerBehavior
         // ];
         // $width = 500;
         // $height = 500;
-        // $chartData = [
+        // $chartDatas = [
         //     'labels' => ['2021-quarter-1', '2020-quarter-4', '2020-quarter-3', '2020-quarter-2', '2020-quarter-1', '2019-quarter-4'],
         //     'datasets' => [
         //         [
@@ -151,6 +231,6 @@ class ChartsBehavior extends ControllerBehavior
         //     ],
         // ];
 
-        return $this->createChart($chartData, $partial, $options, $width, $height);
+        return $this->createChart($chartDatas, $partial, $options, $width, $height);
     }
 }
