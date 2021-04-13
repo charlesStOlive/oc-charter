@@ -17,6 +17,8 @@ class ChartsBehavior extends ControllerBehavior
     public function __construct($controller)
     {
         parent::__construct($controller);
+        $controller->addJs('/plugins/waka/charter/widgets/chartswidget/assets/js/wakachart.js');
+        $controller->addJs('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js');
         /*
          * Build configuration
          */
@@ -26,19 +28,6 @@ class ChartsBehavior extends ControllerBehavior
         $this->chartOptions = [];
 
     }
-
-    //  public static function find($code)
-    // {
-    //     $chartType;
-    //     $chartModels = Config::get('chartModel');
-    //     $chartType = $chartModels[$code] ?? null;
-    //     if (!$chartType) {
-    //         throw new ApplicationException("Problème de configuration de chartModels");
-    //     }
-    //     self::$chartType = $chartType;
-    //     return new self;
-    // }
-
     public function setChartType($type) {
         $this->chartType = $type;
         return $this;

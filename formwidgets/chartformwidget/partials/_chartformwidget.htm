@@ -1,3 +1,9 @@
-<div id="<?= $this->getId() ?>">
-    <?= $chartHtm ?>
+<div style="width:500px;height:500px">
+    <div class="reportGraph"
+         style="position:relative;margin:auto;width:90%;height:90% ;">
+        <canvas id="myChart" class="waka-chart-canvas"
+                data-options='<?= $options ?>'
+                data-chartdata='<?= $chartdata ?>'
+                style="width:100%;height:100%;"></canvas>
+    </div>
 </div>
