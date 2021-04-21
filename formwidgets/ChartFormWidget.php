@@ -79,8 +79,8 @@ class ChartFormWidget extends FormWidgetBase
         //A fair en endernier en fonction des données les couleurs vont changer
         $this->setChartOptions($options);
 
-        trace_log($this->chartDatas);
-        trace_log($this->chartOptions);
+        //trace_log($this->chartDatas);
+        //trace_log($this->chartOptions);
 
 
         $this->vars['chartdata'] = json_encode($this->chartDatas);

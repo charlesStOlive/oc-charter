@@ -47,11 +47,11 @@ class ChartsWidget extends WidgetBase
         $this->vars['options'] = json_encode($this->options);
         $this->vars['width'] = $this->width . 'px';
         $this->vars['height'] = $this->height . 'px';
-        trace_log($this->chartType);
-        trace_log(json_encode($this->chartDatas));
-        trace_log(json_encode($this->options));
-        trace_log($this->width . 'px');
-        trace_log($this->height . 'px');
+        //trace_log($this->chartType);
+        //trace_log(json_encode($this->chartDatas));
+        //trace_log(json_encode($this->options));
+        //trace_log($this->width . 'px');
+        //trace_log($this->height . 'px');
 
         return $this->makePartial($this->chartType);
     }
