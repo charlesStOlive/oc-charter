@@ -69,12 +69,18 @@ class Plugin extends PluginBase
      */
     public function registerPermissions()
     {
-        return []; // Remove this line to activate
-
         return [
-            'waka.charter.some_permission' => [
-                'tab' => 'Charter',
-                'label' => 'Some permission',
+            'waka.agg.admin.super' => [
+                'tab' => 'Waka - Graphiques',
+                'label' => 'Super Administrateur des graphiques',
+            ],
+            'waka.agg.admin.base' => [
+                'tab' => 'Waka - Graphiques',
+                'label' => 'Administrateur des graphiques',
+            ],
+            'waka.agg.user' => [
+                'tab' => 'Waka - Graphiques',
+                'label' => 'Utilisateur des graphiques',
             ],
         ];
     }
