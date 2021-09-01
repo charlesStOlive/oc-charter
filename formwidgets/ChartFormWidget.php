@@ -18,8 +18,8 @@ class ChartFormWidget extends FormWidgetBase
     public $beginAtZero = true;
     public $labels = [];
     public $dataSets = [];
-    public $width = '400';
-    public $height = '400';
+    public $width = '100%';
+    public $height = '300px';
     public $attributes = [];
     public $chartDatas;
     public $chartOptions;
@@ -41,7 +41,9 @@ class ChartFormWidget extends FormWidgetBase
             'labels',
             'dataSets',
             'beginAtZero',
-            'attributes'
+            'attributes',
+            'width',
+            'height',
         ]);
     }
 
@@ -85,8 +87,8 @@ class ChartFormWidget extends FormWidgetBase
 
         $this->vars['chartdata'] = json_encode($this->chartDatas);
         $this->vars['options'] = json_encode($this->chartOptions);
-        $this->vars['width'] = $this->width . 'px';
-        $this->vars['height'] = $this->height . 'px';
+        $this->vars['width'] = $this->width;
+        $this->vars['height'] = $this->height;
     }
 
     public function addManualDataSet(string $label, array $data) {
