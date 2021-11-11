@@ -23,6 +23,7 @@ class ChartFormWidget extends FormWidgetBase
     public $attributes = [];
     public $chartDatas;
     public $chartOptions;
+    public $fnc = null;
 
 
     /**
@@ -44,6 +45,7 @@ class ChartFormWidget extends FormWidgetBase
             'attributes',
             'width',
             'height',
+            'fnc'
         ]);
     }
 
@@ -68,16 +70,23 @@ class ChartFormWidget extends FormWidgetBase
             'beginAtZero' => $this->beginAtZero,
         ];
         $fncLabels = $this->labels;
-        $labels = $model->{$fncLabels}($this->attributes);
-        $this->addLabels($labels);
         //trace_log($labels);
-        foreach($this->dataSets as $rowDataSet) { 
-            $dataSetFnc = $rowDataSet['fnc'] ?? '';
+        foreach($this->dataSets as $key=>$rowDataSet) { 
+            $dataSetFnc = $rowDataSet['fnc'] ?? $this->fnc;
+            if(!$dataSetFnc) {
+                 throw new \ApplicationException('La fonction est manquante pour le dataSet '.$key.' du '.$this->getFieldname()); 
+            }
             $dataSetLabel = $rowDataSet['label'] ?? '';
-            $dataSet = $model->{$dataSetFnc}($this->attributes);
+            $dataSetAttributes = $rowDataSet['attributes'] ?? null;
+            if(!$dataSetAttributes) {
+                 throw new \ApplicationException('les attributs sont manquants pour le dataSet '.$key.' du '.$this->getFieldname()); 
+            }
+            $dataSet = $model->{$dataSetFnc}($dataSetAttributes);
             //trace_log($dataSet);
             $this->addManualDataSet($dataSetLabel, $dataSet);
         }
+        $labels = $model->{$fncLabels}($this->dataSets['first']['attributes']);
+        $this->addLabels($labels);
         //A fair en endernier en fonction des données les couleurs vont changer
         $this->setChartOptions($options);
 

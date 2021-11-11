@@ -63,6 +63,21 @@ class Plugin extends PluginBase
         ];
     }
 
+
+    public function registerWakaRules()
+    {
+        return [
+            'asks' => [
+                ['\Waka\Charter\WakaRules\Asks\ChartPie'], 
+                ['\Waka\Charter\WakaRules\Asks\BarLine'],
+            ],
+            'fncs' => [
+            ],
+            'conditions' => [
+            ]
+        ];
+    }
+
     /**
      * Registers any back-end permissions used by this plugin.
      *
@@ -85,6 +100,7 @@ class Plugin extends PluginBase
             ],
         ];
     }
+
 
     /**
      * Registers back-end navigation items for this plugin.

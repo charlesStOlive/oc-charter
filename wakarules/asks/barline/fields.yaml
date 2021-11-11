@@ -1,0 +1,49 @@
+fields:
+    title:
+        label: Titre gu graphique
+        span: full
+    relation:
+        label: Relation portant le calcul
+    type: 
+        label: type 
+        type: dropdown
+        span: full
+        options:
+            bar: Barre
+            line: Lignes
+    width:
+        label: Width
+        span: auto
+    height:
+        label: Height
+        span: auto
+    src_labels:
+        label: Source des labels
+        type: dropdown
+        options: listModelLabels
+        span: full
+        dependsOn: relation
+    src_calculs:
+        label: Source des cacluls
+        type: dropdown
+        options: listModelCalculs
+        span: left
+        dependsOn: relation
+    src_1_label:
+        label: Label sources 1
+    src_1_att:
+        label: Période (scope) du calcul 1
+        type: dropdown
+        span: right
+        options: listPeriode
+        sapn: auto
+    src_2_label:
+        label: Label sources 2
+    src_2_att:
+        label: Période (scope) du calcul 2
+        type: dropdown
+        span: right
+        options: listPeriode
+        sapn: auto
+            
+
