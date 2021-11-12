@@ -31,6 +31,7 @@ fields:
         dependsOn: relation
     src_1_label:
         label: Label sources 1
+        span: left
     src_1_att:
         label: Période (scope) du calcul 1
         type: dropdown
@@ -39,6 +40,7 @@ fields:
         sapn: auto
     src_2_label:
         label: Label sources 2
+        span: left
     src_2_att:
         label: Période (scope) du calcul 2
         type: dropdown
