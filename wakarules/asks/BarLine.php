@@ -18,7 +18,7 @@ class BarLine extends ChartBase
             'description' => 'Accèpte multiples dataSet',
             'icon'        => 'icon-pie-chart',
             'premission'  => 'wcli.utils.ask.edit.admin',
-            'show_attributes' => true,
+            'show_attributes' => false,
             'word_type' => 'IMG',
         ];
     }
@@ -42,7 +42,7 @@ class BarLine extends ChartBase
      */
 
     public function resolve($modelSrc, $context = 'twig', $dataForTwig = []) {
-
+        trace_log('resolve --');
         $model = $modelSrc;
         if($childModel = $this->getConfig('relation')) {
             $model = $this->getRelation($model, $childModel);
@@ -64,15 +64,32 @@ class BarLine extends ChartBase
          $attributes2 = [
             'periode' => $src_1_att,
         ];
-        //trace_log("resolve");
-        //trace_log(get_class($model));
-        //trace_log($model->name);
 
+        $dataSet1 = [];
+        $dataSet2 = [];
+        $labels = [];
+
+        //Préparation des label si pas overridé par thuis->labels
+        $labelsTemp = null;
+
+
+        if(method_exists($model, $src_calculs)) {
+            $dataSet1 = $model->{$src_calculs}($attributes1);
+            $dataSet1 = array_values($dataSet1);
+            $dataSet2 = $model->{$src_calculs}($attributes2);
+            $labelsTemp = array_keys($dataSet2);
+            $dataSet2 = array_values($dataSet2);
+            
+        } 
         
-        $dataSet1 = $model->{$src_calculs}($attributes1);
-        $dataSet2 = $model->{$src_calculs}($attributes2);
-        $labels = $model->{$srcLabels}($attributes1);
-
+        $labels;
+        if($srcLabels) {
+            if(method_exists($model, $srcLabels)) {
+                $labels = $model->{$srcLabels}($attributes1);
+            }
+        } else {
+            $labels = $labelsTemp;
+        };
 
         $options = [
             'type' => $this->getConfig('type'),
@@ -92,14 +109,9 @@ class BarLine extends ChartBase
                 ],
             ],
         ];
-        //trace_log($labels);
-        //trace_log($dataSet1);
-        //trace_log($src_1_label);
-        //trace_log($dataSet2);
-        //trace_log($src_2_label);
-        //trace_log($options);
-        //trace_log($width);
-        //trace_log($height);
+
+        trace_log($datas);
+
 
         $chart = new Charts();
         $chart_url = $chart->setChartType('bar_or_line')

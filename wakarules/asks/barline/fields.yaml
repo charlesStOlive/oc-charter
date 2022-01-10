@@ -21,12 +21,14 @@ fields:
         label: Source des labels
         type: dropdown
         options: listModelLabels
+        placeholder: --choisissez--
         span: full
         dependsOn: relation
     src_calculs:
         label: Source des cacluls
         type: dropdown
         options: listModelCalculs
+        placeholder: --choisissez--
         span: left
         dependsOn: relation
     src_1_label:

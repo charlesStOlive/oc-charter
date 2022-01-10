@@ -23,7 +23,7 @@ class ChartBase extends AskBase
         $methods = $this->getAllMethods($class);
         $labelMethods = [];
         foreach($methods as $method) {
-            if(starts_with($method->name, 'getCc')) {
+            if(ends_with($method->name, 'DataSet')) {
                 $labelMethods[$method->name] = $method->name;
             }
         }
@@ -34,7 +34,7 @@ class ChartBase extends AskBase
         $methods = $this->getAllMethods($class);
         $labelMethods = [];
         foreach($methods as $method) {
-            if(starts_with($method->name, 'getLb')) {
+            if(ends_with($method->name, 'Labels')) {
                 $labelMethods[$method->name] = $method->name;
             }
         }

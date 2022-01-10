@@ -26,11 +26,15 @@ Function.prototype.bind = Function.prototype.bind || function(thisp) {
     };
 };
 
+
 var ctx = document.getElementById('myChart').getContext('2d');
 var graph = document.getElementById('myChart');
 
 var options = JSON.parse(graph.dataset.options)
 var chartdata = JSON.parse(graph.dataset.chartdata)
+
+console.log(options)
+console.log(chartdata)
 
 var datas = {
     type: options.type,
@@ -40,5 +44,6 @@ var datas = {
         animation: false,
     },
 }
+
 var myChart = new Chart(ctx, datas);
 </script>
