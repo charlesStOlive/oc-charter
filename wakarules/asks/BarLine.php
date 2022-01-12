@@ -42,7 +42,7 @@ class BarLine extends ChartBase
      */
 
     public function resolve($modelSrc, $context = 'twig', $dataForTwig = []) {
-        trace_log('resolve --');
+        //trace_log('resolve --');
         $model = $modelSrc;
         if($childModel = $this->getConfig('relation')) {
             $model = $this->getRelation($model, $childModel);
@@ -110,7 +110,7 @@ class BarLine extends ChartBase
             ],
         ];
 
-        trace_log($datas);
+        //trace_log($datas);
 
 
         $chart = new Charts();
