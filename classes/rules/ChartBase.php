@@ -3,7 +3,6 @@
 use Waka\Utils\Classes\Rules\AskBase;
 use Winter\Storm\Extension\ExtensionBase;
 use Waka\Utils\Classes\DataSource;
-use Waka\Utils\Interfaces\Ask as AskInterface;
 
 /**
  * Notification ask base class

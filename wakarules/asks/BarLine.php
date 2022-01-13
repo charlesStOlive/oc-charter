@@ -4,22 +4,26 @@ use Waka\Charter\Classes\Rules\ChartBase;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use ApplicationException;
 use Waka\Charter\Controllers\Charts;
+use Waka\Utils\Interfaces\Ask as AskInterface;
 
-class BarLine extends ChartBase
+class BarLine extends ChartBase implements AskInterface
 {
     public $jsonable = [];
     /**
      * Returns information about this event, including name and description.
      */
-    public function askDetails()
+    public function subFormDetails()
     {
         return [
             'name'        => 'Graphique en barre ou ligne',
             'description' => 'Accèpte multiples dataSet',
             'icon'        => 'icon-pie-chart',
             'premission'  => 'wcli.utils.ask.edit.admin',
+            'ask_emit'    => 'richeditor',
             'show_attributes' => false,
-            'word_type' => 'IMG',
+            'outputs' => [
+                'word_type' => 'HTM',
+            ]
         ];
     }
 

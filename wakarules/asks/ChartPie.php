@@ -4,14 +4,15 @@ use Waka\Charter\Classes\Rules\ChartBase;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use ApplicationException;
 use Waka\Charter\Controllers\Charts;
+use Waka\Utils\Interfaces\Ask as AskInterface;
 
-class ChartPie extends ChartBase
+class ChartPie extends ChartBase implements AskInterface
 {
 
     /**
      * Returns information about this event, including name and description.
      */
-    public function askDetails()
+    public function subFormDetails()
     {
         return [
             'name'        => 'Graphique PIE',
@@ -19,7 +20,9 @@ class ChartPie extends ChartBase
             'icon'        => 'icon-pie-chart',
             'premission'  => 'wcli.utils.ask.edit.admin',
             'show_attributes' => true,
-            'word_type' => 'IMG',
+            'outputs' => [
+                'word_type' => 'HTM',
+            ]
         ];
     }
 
