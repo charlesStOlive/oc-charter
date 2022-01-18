@@ -22,12 +22,14 @@ fields:
         type: dropdown
         options: listModelLabels
         span: full
+        placeholder: --choisssez--
         dependsOn: relation
     src_calculs:
         label: Source des cacluls
         type: dropdown
         options: listModelCalculs
         span: left
+        placeholder: --choisssez--
         dependsOn: relation
     calculs_attributes:
         label: Période (scope) du calcul

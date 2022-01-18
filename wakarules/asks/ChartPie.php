@@ -19,7 +19,6 @@ class ChartPie extends ChartBase implements AskInterface
             'description' => 'Ajoute un champs HTML',
             'icon'        => 'icon-pie-chart',
             'premission'  => 'wcli.utils.ask.edit.admin',
-            'show_attributes' => true,
             'outputs' => [
                 'word_type' => 'HTM',
             ]
@@ -51,7 +50,7 @@ class ChartPie extends ChartBase implements AskInterface
             $model = $this->getRelation($model, $childModel);
         }
         $srcLabels = $this->getConfig('src_labels');
-        $srcCalculs = $this->getConfig('src_calculs');
+        $src_calculs = $this->getConfig('src_calculs');
         $calculsAttributes = $this->getConfig('calculs_attributes');
         $width =  $this->getConfig('width');
         $height = $this->getConfig('height');
@@ -61,9 +60,25 @@ class ChartPie extends ChartBase implements AskInterface
             'periode' => $calculsAttributes,
         ];
 
+        //Préparation des label si pas overridé par thuis->labels
+        $labelsTemp = null;
+
         
-        $dataSet = $model->{$srcCalculs}($attributes);
-        $labels = $model->{$srcLabels}($attributes);
+        if(method_exists($model, $src_calculs)) {
+            $dataSet1 = $model->{$src_calculs}($attributes);
+            $dataSet1 = array_values($dataSet1);
+            $labelsTemp = array_keys($dataSet1);
+            
+        } 
+        
+        $labels;
+        if($srcLabels) {
+            if(method_exists($model, $srcLabels)) {
+                $labels = $model->{$srcLabels}($attributes1);
+            }
+        } else {
+            $labels = $labelsTemp;
+        };
 
 
         $options = [
@@ -75,8 +90,8 @@ class ChartPie extends ChartBase implements AskInterface
             'labels' => $labels,
             'datasets' => [
                 [
-                    'data' => $dataSet,
-                    'label' => 'CA (N-1)',
+                    'data' => $dataSet1,
+                    'label' => $srcLabels,
                 ],
             ],
         ];

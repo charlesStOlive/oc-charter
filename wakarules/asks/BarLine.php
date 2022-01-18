@@ -19,7 +19,6 @@ class BarLine extends ChartBase implements AskInterface
             'description' => 'Accèpte multiples dataSet',
             'icon'        => 'icon-pie-chart',
             'premission'  => 'wcli.utils.ask.edit.admin',
-            'ask_emit'    => 'richeditor',
             'show_attributes' => false,
             'outputs' => [
                 'word_type' => 'HTM',
