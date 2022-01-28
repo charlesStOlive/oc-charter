@@ -58,7 +58,7 @@ class ChartsWidget extends WidgetBase
 
     public function createOptions($options)
     {
-        trace_log($options);
+        //trace_log($options);
         $this->options = [
             'type' => $options['type'] ?? 'bar',
             //ID pour affichage de plusieurs graphes dans une même page web. L'id est ajouté à créate options dans le chartFormWidget

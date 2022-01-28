@@ -46,7 +46,7 @@ class BarLine extends ChartBase implements AskInterface
      */
 
     public function resolve($modelSrc, $context = 'twig', $dataForTwig = []) {
-        trace_log('resolve --'.$context);
+        //trace_log('resolve --'.$context);
         $model = $modelSrc;
         if($childModel = $this->getConfig('relation')) {
             $model = $this->getRelation($model, $childModel);
@@ -126,13 +126,13 @@ class BarLine extends ChartBase implements AskInterface
         else {
             $pictureUrl = MakeShot::htm($chartHtm, $width, $height);
 
-            trace_log($pictureUrl);
+            //trace_log($pictureUrl);
 
             $finalResult = [
                 'width' => $width,
                 'height' => $height,
                 'title' => $title,
-                'url' => $pictureUrl,
+                'path' => $pictureUrl,
             ];
             return $finalResult;
         }

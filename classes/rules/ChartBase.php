@@ -57,10 +57,10 @@ class ChartBase extends AskBase
         $labelSeries = [];
         foreach($methods as $method) {
             if(ends_with($method->name, 'DataSetSeries')) {
-                $labelMethods[$method->name] = $method->name;
+                $labelSeries[$method->name] = $method->name;
             }
         }
-        return $labelMethods;
+        return $labelSeries;
     }
 
     
