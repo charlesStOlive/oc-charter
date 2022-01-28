@@ -5,10 +5,11 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
 use ApplicationException;
 use Waka\Charter\Controllers\Charts;
 use Waka\Utils\Interfaces\Ask as AskInterface;
+use Waka\Pdfer\Classes\MakeShot;
 
 class BarLine extends ChartBase implements AskInterface
 {
-    public $jsonable = [];
+    public $jsonable = ['datas'];
     /**
      * Returns information about this event, including name and description.
      */
@@ -45,46 +46,49 @@ class BarLine extends ChartBase implements AskInterface
      */
 
     public function resolve($modelSrc, $context = 'twig', $dataForTwig = []) {
-        //trace_log('resolve --');
+        trace_log('resolve --'.$context);
         $model = $modelSrc;
         if($childModel = $this->getConfig('relation')) {
             $model = $this->getRelation($model, $childModel);
         }
-        $src_1_label = $this->getConfig('src_1_label');
-        $src_1_att = $this->getConfig('src_1_att');
-        $src_2_label = $this->getConfig('src_2_label');
-        $src_2_att = $this->getConfig('src_2_att');
         //
-        $srcLabels = $this->getConfig('src_labels');
         $src_calculs = $this->getConfig('src_calculs');
+        $series = $this->host->getConfig('datas');
+        //trace_log($series);
+
         $width =  $this->getConfig('width');
         $height = $this->getConfig('height');
         $title = $this->getConfig('title');
+        $srcLabels = $this->getConfig('srcLabels');
 
-        $attributes1 = [
-            'periode' => $src_2_att,
-        ];
-         $attributes2 = [
-            'periode' => $src_1_att,
+        $datas = [
+            'datasets' => [],
         ];
 
-        $dataSet1 = [];
-        $dataSet2 = [];
-        $labels = [];
+        $options = [
+            'type' => $this->getConfig('type'),
+            'beginAtZero' => true,
+            // 'color' => $attributes['color'],
+        ];
 
-        //Préparation des label si pas overridé par thuis->labels
-        $labelsTemp = null;
+        // $attribute
+        $i=0;
+        $labelsTemp;
+        foreach($series as $serie) {
+            $serieAttribute = $serie['src_att'];
+            // Cas des attributs période
+            $attribute = ['periode' => $serieAttribute];
+            $dataFromModel = $model->{$src_calculs}($attribute);
+            $serieData = [
+                'label' => $serie['src_label'],
+                'data' =>  array_values($dataFromModel),
+            ];
+            $labelsTemp = array_keys($dataFromModel);
+            $datas['datasets'][$i] = $serieData;
+            //chart.js aime  les 0 contrairement a powerpoint...
+            $i++;
+        }
 
-
-        if(method_exists($model, $src_calculs)) {
-            $dataSet1 = $model->{$src_calculs}($attributes1);
-            $dataSet1 = array_values($dataSet1);
-            $dataSet2 = $model->{$src_calculs}($attributes2);
-            $labelsTemp = array_keys($dataSet2);
-            $dataSet2 = array_values($dataSet2);
-            
-        } 
-        
         $labels;
         if($srcLabels) {
             if(method_exists($model, $srcLabels)) {
@@ -94,41 +98,45 @@ class BarLine extends ChartBase implements AskInterface
             $labels = $labelsTemp;
         };
 
+        $datas['labels'] = $labels;
+
         $options = [
             'type' => $this->getConfig('type'),
-            'beginAtZero' => false,
+            'beginAtZero' => $this->getConfig('beginAtZero'),
             // 'color' => $attributes['color'],
         ];
-        $datas = [
-            'labels' => $labels,
-            'datasets' => [
-                [
-                    'data' => $dataSet1,
-                    'label' => $src_1_label,
-                ],
-                [
-                    'data' => $dataSet2,
-                    'label' => $src_2_label,
-                ],
-            ],
-        ];
 
-        //trace_log($datas);
-
-
-        $chart = new Charts();
-        $chart_url = $chart->setChartType('bar_or_line')
+        $chartHtm = new Charts();
+        $chartHtm = $chartHtm->setChartType('bar_or_line')
                     ->addChartDatas($datas)
                     ->addChartOptions($options)
-                    ->getChartUrl($width, $height);
+                    ->renderChart($width, $height);
 
-        $finalResult = [
-            'path' => $chart_url,
-            'width' => $width,
-            'height' => $height,
-            'title' => $title,
-        ];
-        //trace_log($finalResult);
-        return $finalResult;
+        if($context == 'twig') {
+
+            $finalResult = [
+                'width' => $width,
+                'height' => $height,
+                'title' => $title,
+                'htm' => $chartHtm,
+            ];
+            return $finalResult;
+            
+        }
+        else {
+            $pictureUrl = MakeShot::htm($chartHtm, $width, $height);
+
+            trace_log($pictureUrl);
+
+            $finalResult = [
+                'width' => $width,
+                'height' => $height,
+                'title' => $title,
+                'url' => $pictureUrl,
+            ];
+            return $finalResult;
+        }
+
+        
     }
 }

@@ -2,7 +2,7 @@
 
 use Backend\Classes\ControllerBehavior;
 use Waka\Charter\Widgets\ChartsWidget;
-use Waka\Utils\Classes\TmpFiles;
+
 
 class ChartsBehavior extends ControllerBehavior
 {
@@ -113,28 +113,35 @@ class ChartsBehavior extends ControllerBehavior
     }
 
     //ancien nom : createChartUrl
-    public function getChartUrl($width, $height)
-    {
-        $htm = $this->chartWidget->setChartType($this->chartType)
-                ->setChartDatas($this->chartDatas)
-                ->setChartOptions($this->chartOptions)
-                ->create($width, $height);
+    // public function getChartUrl($width, $height)
+    // {
+    //     $htm = $this->chartWidget->setChartType($this->chartType)
+    //             ->setChartDatas($this->chartDatas)
+    //             ->setChartOptions($this->chartOptions)
+    //             ->create($width, $height);
 
-        //trace_log($htm);
+    //     //trace_log($htm);
 
-        $tmpfile =  TmpFiles::createDirectory()->emptyFile("chart.jpeg");
-        //trace_log($tmpfile->getFilePath());
-        \SnappyImage::loadHTML($htm)
-            ->setOption('width', $width)
-            ->setOption('height', $height)
-            ->setOption('enable-javascript', true)
-            ->setOption('javascript-delay', 100)
-            ->setOption('format', 'jpeg')
-            ->save($tmpfile->getFilePath());
-        //->inline();
-        //trace_log($tmpfile->getFileUrl());
-        return $tmpfile->getFileUrl();
-    }
+    //     $tmpfile =  TmpFiles::createDirectory()->emptyFile("chart.jpeg");
+    //     //trace_log($tmpfile->getFilePath());
+    //     //trace_log($tmpfile->getFileUrl());
+    //     Browsershot::html($htm)
+    //         ->showBackground()
+    //         ->emulateMedia('screen')
+    //         ->windowSize($width,  $height)
+    //         ->save($tmpfile->getFilePath());
+
+    //     // \SnappyImage::loadHTML($htm)
+    //     //     ->setOption('width', $width)
+    //     //     ->setOption('height', $height)
+    //     //     ->setOption('enable-javascript', true)
+    //     //     ->setOption('javascript-delay', 100)
+    //     //     ->setOption('format', 'jpeg')
+    //     //     ->save($tmpfile->getFilePath());
+    //     //->inline();
+    //     //trace_log($tmpfile->getFileUrl());
+    //     return $tmpfile->getFileUrl();
+    // }
 
     public function onTest()
     {

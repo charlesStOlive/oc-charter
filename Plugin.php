@@ -74,8 +74,8 @@ class Plugin extends PluginBase
     {
         return [
             'asks' => [
-                ['\Waka\Charter\WakaRules\Asks\ChartPie',  'onlyClass' => ['WakaPdf', 'WakaMail', 'document']], 
-                ['\Waka\Charter\WakaRules\Asks\BarLine','onlyClass' => ['WakaPdf', 'WakaMail', 'document']],
+                ['\Waka\Charter\WakaRules\Asks\ChartPie',  'onlyClass' => ['wakaPdf', 'wakaMail', 'document']], 
+                ['\Waka\Charter\WakaRules\Asks\BarLine','onlyClass' => ['wakaPdf', 'wakaMail', 'document']],
             ],
             'fncs' => [
             ],

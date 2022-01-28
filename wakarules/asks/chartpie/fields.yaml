@@ -1,9 +1,37 @@
 fields:
+    relation:
+        label: Relation portant le calcul
+        restricted: true
+        span: left
+    src_calculs:
+        label: Source des cacluls
+        type: dropdown
+        options: listModelCalculs
+        placeholder: --choisissez--
+        span: right
+        dependsOn: relation
+    attributesMode:
+        label: Mode choix des attributs
+        type: dropdown
+        dependsOn: relation
+        span: left
+        restricted: true
+        options:
+            scopes: Scopes
+            perso: Personalisés
+    attributesFunction:
+        label: Fonctions determinsant les attributs
+        span: right
+        type: dropdown
+        options: listModelSeries
+        restricted: true
+        trigger:
+            action: show
+            field: attributesMode
+            condition: value[perso]
     title:
         label: Titre gu graphique
         span: full
-    relation:
-        label: Relation portant le calcul
     type: 
         label: type 
         type: dropdown
@@ -17,23 +45,18 @@ fields:
     height:
         label: Height
         span: auto
-    src_labels:
-        label: Source des labels
-        type: dropdown
-        options: listModelLabels
-        span: full
-        placeholder: --choisssez--
-        dependsOn: relation
-    src_calculs:
-        label: Source des cacluls
-        type: dropdown
-        options: listModelCalculs
+    src_label:
+        label: Label sources 1
         span: left
-        placeholder: --choisssez--
-        dependsOn: relation
-    calculs_attributes:
-        label: Période (scope) du calcul
+        default: CA
+    src_att:
+        label: Période (scope) du calcul 1
         type: dropdown
         span: right
-        options: listPeriode
+        options: listAttributes
+        sapn: auto
+        dependsOn: [attributesMode, attributesFunction]
+
+
+            
 

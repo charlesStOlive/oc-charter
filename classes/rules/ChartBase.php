@@ -18,6 +18,18 @@ class ChartBase extends AskBase
         $class = new \ReflectionClass($class);
         return $class->getMethods();
     }
+
+    public function getFinalClass() {
+        $class = $this->getDs()->class;
+        if($childModel = $this->host->relation) {
+            //trace_log('relation : '.$childModel.' class : '.$class);
+            $finalClass = $this->getClassRelation($class, $childModel);
+            $class = get_class($finalClass);
+        }
+        return $class;
+    }
+
+
     public function getAllCalculs($class) {
         $methods = $this->getAllMethods($class);
         $labelMethods = [];
@@ -40,33 +52,56 @@ class ChartBase extends AskBase
         return $labelMethods;
     }
 
-    public function listModelCalculs() {
-        //trace_log('listModelCalculs');
-        $class = $this->getDs()->class;
-        //trace_log();
-        if($childModel = $this->host->relation) {
-            //trace_log('relation : '.$childModel.' class : '.$class);
-            $finalClass = $this->getClassRelation($class, $childModel);
-            $class = get_class($finalClass);
+    public function getAllSeries($class) {
+        $methods = $this->getAllMethods($class);
+        $labelSeries = [];
+        foreach($methods as $method) {
+            if(ends_with($method->name, 'DataSetSeries')) {
+                $labelMethods[$method->name] = $method->name;
+            }
         }
-        //trace_log(get_class($class));
+        return $labelMethods;
+    }
+
+    
+
+    public function listModelCalculs() {
+        $class = $this->getFinalClass();
         return $this->getAllCalculs($class);
     }
 
     public function listModelLabels($class) {
-        //trace_log('listModelLabels');
-        $class = $this->getDs()->class;
-        if($childModel = $this->host->relation) {
-            //trace_log('relation : '.$childModel.' class : '.$class);
-            $finalClass = $this->getClassRelation($class, $childModel);
-            $class = get_class($finalClass);
+        $class = $this->getFinalClass();
+        return $this->getAllLabels($class); 
+    }
+
+    public function listModelSeries($class) {
+        $class = $this->getFinalClass();
+        return $this->getAllSeries($class); 
+    }
+
+    public function listAttributes() {
+        $attributeMode = $this->host->attributesMode;
+        //trace_log($attributeMode);
+        if($attributeMode == "perso") {
+            $class = $this->getFinalClass();
+            $datas = new $class();
+            // trace_log($this->host->{$this->host->attributesFunction}());
+            // trace_log($this->host->attributesFunction);
+            return $datas->{$this->host->attributesFunction}();
+        } else {
+            return $this->listPeriode();
             
         }
-        //trace_log(get_class($class));
-        return $this->getAllLabels($class);
 
-         
     }
+
+    // public function filterFields($fields, $context = null) {
+    //      if(isset($fields->attributesMode)) {
+    //            //trace_log($fields->attributesMode->value);
+
+    //     }
+    // }
 
     public function getRelation($class, $relation) 
     {
