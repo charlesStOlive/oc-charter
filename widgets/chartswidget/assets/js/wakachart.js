@@ -18,7 +18,7 @@ $(document).ready(function () {
 
     var charts = $(".waka-chart-canvas");
     charts.each(function (i, obj) {
-        console.log(obj)
+        //console.log(obj)
         var ctx = obj.getContext('2d');
         var graph = obj;
 
@@ -26,7 +26,7 @@ $(document).ready(function () {
         var chartdata = JSON.parse(graph.dataset.chartdata)
 
         var chartType = options.type
-        console.log(options)
+        //console.log(options)
         var datas = {}
         if (chartType == 'pie' || 'doughnut') {
             var datas = {
